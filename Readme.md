@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Руслан Полонкоев](https://up.htmlacademy.ru/javascript/11/user/92326).
-* Наставник: `Неизвестно`.
+* Наставник: Магомед Кандаев.
 
 ---
 
