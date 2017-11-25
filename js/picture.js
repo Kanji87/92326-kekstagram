@@ -13,14 +13,15 @@ var comments = [
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
 ];
 
-var getComment = function () {
-  var commentStr = '';
-  if (getRandomInt(0, 1)) {
-    commentStr = comments[getRandomInt(0, comments.length - 1)] + ' ' + comments[getRandomInt(0, comments.length - 1)];
+var getComments = function () {
+  var commentArr = [];
+  if (Math.round(Math.random())) {
+    commentArr[0] = comments[getRandomInt(0, comments.length - 1)];
+    commentArr[1] = comments[getRandomInt(0, comments.length - 1)]
   } else {
-    commentStr = comments[getRandomInt(0, comments.length - 1)];
+    commentArr[0] = comments[getRandomInt(0, comments.length - 1)];
   }
-  return commentStr;
+  return commentArr;
 };
 
 var createPicIndexArray = function (arrLength) {
@@ -38,9 +39,9 @@ var createPicObjects = function (picCount) {
   for (var i = 0; i < picCount; i++) {
     pic = picIndexArr[getRandomInt(0, picIndexArr.length)];
     picArr[i] = {
-      url: 'phonots/{{' + pic + '}}.jpg',
+      url: 'photos/' + pic + '.jpg',
       likes: getRandomInt(15, 200),
-      comments: getComment()
+      comments: getComments()
     };
     for (var j = 0; j < picIndexArr.length; j++) {
       if (picIndexArr[j] === pic) {
@@ -51,4 +52,29 @@ var createPicObjects = function (picCount) {
   return picArr;
 };
 
+var createDomEl = function (obj, template) {
+  var domEl = template.cloneNode(true);
+  domEl.querySelector('.picture img').setAttribute('src', obj.url);
+  domEl.querySelector('.picture-comments').textContent = obj.comments.length;
+  domEl.querySelector('.picture-likes').textContent = obj.likes;
+  return domEl;
+};
+
+var createPicList = function (arr, template, fragment) {
+  for (var i = 0; i < arr.length; i++) {
+    fragment.appendChild(createDomEl(arr[i], template));
+  }
+};
+
+var fragment = document.createDocumentFragment();
+var picTemplate = document.querySelector('#picture-template').content;
+var picturesContainer = document.querySelector('.pictures');
 var pics = createPicObjects(25);
+
+createPicList(pics, picTemplate, fragment);
+picturesContainer.appendChild(fragment);
+
+document.querySelector('.gallery-overlay').classList.remove('hidden');
+document.querySelector('.gallery-overlay-image').setAttribute('src', pics[0].url);
+document.querySelector('.likes-count').textContent = pics[0].likes;
+document.querySelector('.comments-count').textContent = pics[0].comments.length;
