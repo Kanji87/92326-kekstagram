@@ -17,7 +17,7 @@ var getComments = function () {
   var commentArr = [];
   if (Math.round(Math.random())) {
     commentArr[0] = comments[getRandomInt(0, comments.length - 1)];
-    commentArr[1] = comments[getRandomInt(0, comments.length - 1)]
+    commentArr[1] = comments[getRandomInt(0, comments.length - 1)];
   } else {
     commentArr[0] = comments[getRandomInt(0, comments.length - 1)];
   }
@@ -118,14 +118,14 @@ var hideOverlay = function () {
 
 var hideOverlayOnEsc = function (e) {
   if (e.keyCode === ESC_BUTTON) {
-    hideOverlay()
+    hideOverlay();
   }
   return false;
 };
 
 var hideOverlayOnEnter = function (e) {
   if (e.keyCode === ENTER_BUTTON) {
-    hideOverlay()
+    hideOverlay();
   }
   return false;
 };
