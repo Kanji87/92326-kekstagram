@@ -84,9 +84,7 @@ var ENTER_BUTTON = 13;
 var showOverlay = function (e) {
   var target = e.target;
 
-  while(target.className !== 'picture') {
-    target = target.parentNode;
-  }
+  target = target.closest('.picture') ? target.closest('.picture') : target;
 
   if (target.className === 'picture') {
     e.preventDefault();
@@ -106,7 +104,7 @@ var showOverlay = function (e) {
 
 var showOverlayOnEnter = function (e) {
   if (e.keyCode === ENTER_BUTTON) {
-    showOverlay()
+    showOverlay(e);
   }
   return false;
 };
