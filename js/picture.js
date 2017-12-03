@@ -81,7 +81,7 @@ var galleryOverlay = document.querySelector('.gallery-overlay');
 var ESC_BUTTON = 27;
 var ENTER_BUTTON = 13;
 
-var showOverlay = function (e) {
+var showPhotoOverlay = function (e) {
   var target = e.target;
 
   target = target.closest('.picture') ? target.closest('.picture') : target;
@@ -96,41 +96,85 @@ var showOverlay = function (e) {
     document.querySelector('.comments-count').textContent = commentsCount;
     galleryOverlay.classList.remove('hidden');
 
-    document.addEventListener('keydown', hideOverlayOnEsc);
-    hideOverlayTarget.addEventListener('keydown', hideOverlayOnEnter);
+    document.addEventListener('keydown', hidePhotoOverlayOnEsc);
+    hideOverlayTarget.addEventListener('keydown', hidePhotoOverlayOnEnter);
   }
   return false;
 };
 
-var showOverlayOnEnter = function (e) {
+var showPhotoOverlayOnEnter = function (e) {
   if (e.keyCode === ENTER_BUTTON) {
-    showOverlay(e);
+    showPhotoOverlay(e);
   }
   return false;
 };
 
-var hideOverlay = function () {
+var hidePhotoOverlay = function () {
   galleryOverlay.classList.add('hidden');
 
-  document.removeEventListener('click', hideOverlayOnEsc);
-  hideOverlayTarget.removeEventListener('keydown', hideOverlayOnEnter);
+  document.removeEventListener('click', hidePhotoOverlayOnEsc);
+  hideOverlayTarget.removeEventListener('keydown', hidePhotoOverlayOnEnter);
 };
 
-var hideOverlayOnEsc = function (e) {
+var hidePhotoOverlayOnEsc = function (e) {
   if (e.keyCode === ESC_BUTTON) {
-    hideOverlay();
+    hidePhotoOverlay();
   }
   return false;
 };
 
-var hideOverlayOnEnter = function (e) {
+var hidePhotoOverlayOnEnter = function (e) {
   if (e.keyCode === ENTER_BUTTON) {
-    hideOverlay();
+    hidePhotoOverlay();
   }
   return false;
 };
 
-document.addEventListener('click', showOverlay);
-document.addEventListener('keydown', showOverlayOnEnter);
+document.addEventListener('click', showPhotoOverlay);
+document.addEventListener('keydown', showPhotoOverlayOnEnter);
 
-hideOverlayTarget.addEventListener('click', hideOverlay);
+hideOverlayTarget.addEventListener('click', hidePhotoOverlay);
+
+var uploadPhotoButton = document.querySelector('#upload-file');
+var closeOverlayButton = document.querySelector('.upload-form-cancel');
+var uploadOverlay = document.querySelector('.upload-overlay');
+var effectPreviewImage = document.querySelector('.effect-image-preview');
+var effectButtonClass = 'upload-effect-label';
+
+var showUploadOverlay = function () {
+  uploadOverlay.classList.remove('hidden');
+  document.addEventListener('keydown', hideUploadOverlayOnEsc);
+  closeOverlayButton.addEventListener('click', hideUploadOverlay);
+  closeOverlayButton.addEventListener('keydown', hideUploadOverlayOnEnter);
+  document.addEventListener('click', enablePreviewEffect);
+};
+
+var hideUploadOverlay = function () {
+  uploadOverlay.classList.add('hidden');
+  document.removeEventListener('keydown', hideUploadOverlayOnEsc);
+  closeOverlayButton.removeEventListener('click', hideUploadOverlay);
+  closeOverlayButton.removeEventListener('keydown', hideUploadOverlayOnEnter);
+};
+
+var hideUploadOverlayOnEsc = function (e) {
+  if (e.keyCode === ESC_BUTTON && e.target.className !== 'upload-form-description') {
+    hideUploadOverlay();
+  }
+};
+
+var hideUploadOverlayOnEnter = function (e) {
+  if (e.keyCode === ENTER_BUTTON) {
+    hideUploadOverlay();
+  }
+};
+
+var enablePreviewEffect = function (e) {
+  var target = e.target.closest('.upload-effect-label') ? e.target.closest('.upload-effect-label') : e.target;
+  if (target.className === 'upload-effect-label') {
+    console.log('found it!');
+    console.log(target);
+  }
+};
+
+uploadPhotoButton.addEventListener('change', showUploadOverlay);
+
