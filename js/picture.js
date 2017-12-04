@@ -184,14 +184,14 @@ var enablePreviewEffect = function (e) {
   }
 };
 
-var decreaseImageSize = function() {
+var decreaseImageSize = function () {
   var imagePreview = document.querySelector('.effect-image-preview');
   var currentSizeVal = parseInt(document.querySelector('.upload-resize-controls-value').getAttribute('value').replace('%', ''));
   var minSize = 25;
   var step = 25;
   var newSize = currentSizeVal - step;
   if (newSize < minSize) {
-    imagePreview.style.transform = 'scale(' + minSize  / 100+ ')';
+    imagePreview.style.transform = 'scale(' + minSize / 100 + ')';
     document.querySelector('.upload-resize-controls-value').setAttribute('value', minSize);
   } else if (currentSizeVal > minSize) {
     imagePreview.style.transform = 'scale(' + newSize / 100 + ')';
@@ -200,7 +200,7 @@ var decreaseImageSize = function() {
   return false;
 };
 
-var increaseImageSize = function() {
+var increaseImageSize = function () {
   var imagePreview = document.querySelector('.effect-image-preview');
   var currentSizeVal = parseInt(document.querySelector('.upload-resize-controls-value').getAttribute('value').replace('%', ''));
   var maxSize = 100;
@@ -214,6 +214,57 @@ var increaseImageSize = function() {
     document.querySelector('.upload-resize-controls-value').setAttribute('value', newSize);
   }
   return false;
+};
+
+var checkHashtagNum = function () {
+  var hashtagArr = document.querySelector('.upload-form-hashtags').value.toLowerCase().split(' ');
+
+  return hashtagArr.length > 5 ? false : true;
+};
+
+var checkHashtagDoubles = function () {
+  var hashtagArr = document.querySelector('.upload-form-hashtags').value.toLowerCase().split(' ');
+  var testString = hashtagArr[0];
+  for (var i = 0; i < hashtagArr.length; i++) {
+    console.log('compare ' + testString + 'and ' + hashtagArr[i + 1]);
+    if (testString === hashtagArr[i + 1]) {
+      return false;
+    } else {
+      testString = hashtagArr[i + 1];
+      console.log('testString = ' + testString);
+      hashtagArr = hashtagArr.splice(1, hashtagArr.length);
+      console.log('testArr: ' + hashtagArr);
+    }
+  }
+
+  return true;
+};
+
+var checkHashtagLength = function () {
+  var hashtagArr = document.querySelector('.upload-form-hashtags').value.toLowerCase().split(' ');
+
+  for (var i = 0; i < hashtagArr.length; i++) {
+    if (hashtagArr[i].length > 20) {
+      return false;
+    }
+  }
+  return true;
+};
+
+var checkHashtagHashAndSpaces = function () {
+  var hashtagArr = document.querySelector('.upload-form-hashtags').value.toLowerCase().split(' ');
+  for (var i = 0; i < hashtagArr.length; i++) {
+    if (hashtagArr[i][0] !== '#') {
+      return false;
+    } else {
+      for (var j = 1; j < hashtagArr[i].length; j++) {
+        if (hashtagArr[i][j] === '#') {
+          return false;
+        }
+      }
+    }
+  }
+  return true;
 };
 
 uploadPhotoButton.addEventListener('change', showUploadOverlay);
