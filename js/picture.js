@@ -138,8 +138,6 @@ hideOverlayTarget.addEventListener('click', hidePhotoOverlay);
 var uploadPhotoButton = document.querySelector('#upload-file');
 var closeOverlayButton = document.querySelector('.upload-form-cancel');
 var uploadOverlay = document.querySelector('.upload-overlay');
-var effectPreviewImage = document.querySelector('.effect-image-preview');
-var effectButtonClass = 'upload-effect-label';
 
 var showUploadOverlay = function () {
   uploadOverlay.classList.remove('hidden');
@@ -170,10 +168,12 @@ var hideUploadOverlayOnEnter = function (e) {
 
 var enablePreviewEffect = function (e) {
   var target = e.target.closest('.upload-effect-label') ? e.target.closest('.upload-effect-label') : e.target;
-  var imagePreview = document.querySelector('.effect-image-preview');
-  if (target.className.indexOf('upload-effect-label') > -1) {
+  var effectPreviewImage = document.querySelector('.effect-image-preview');
+  if (target.className.indexOf('upload-effect-label') > -1 || target.className === 'upload-effect-label') {
     var effectName = target.getAttribute('for').replace('upload-', '');
-    imagePreview.classList.add(effectName);
+    effectPreviewImage.className = '';
+    effectPreviewImage.classList.add('effect-image-preview');
+    effectPreviewImage.classList.add(effectName);
   }
 };
 
