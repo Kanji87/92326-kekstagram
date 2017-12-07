@@ -81,7 +81,7 @@ var galleryOverlay = document.querySelector('.gallery-overlay');
 var ESC_BUTTON = 27;
 var ENTER_BUTTON = 13;
 
-var showOverlay = function (e) {
+var showPhotoOverlay = function (e) {
   var target = e.target;
 
   target = target.closest('.picture') ? target.closest('.picture') : target;
@@ -96,41 +96,190 @@ var showOverlay = function (e) {
     document.querySelector('.comments-count').textContent = commentsCount;
     galleryOverlay.classList.remove('hidden');
 
-    document.addEventListener('keydown', hideOverlayOnEsc);
-    hideOverlayTarget.addEventListener('keydown', hideOverlayOnEnter);
+    document.addEventListener('keydown', hidePhotoOverlayOnEsc);
+    hideOverlayTarget.addEventListener('keydown', hidePhotoOverlayOnEnter);
   }
   return false;
 };
 
-var showOverlayOnEnter = function (e) {
+var showPhotoOverlayOnEnter = function (e) {
   if (e.keyCode === ENTER_BUTTON) {
-    showOverlay(e);
+    showPhotoOverlay(e);
   }
   return false;
 };
 
-var hideOverlay = function () {
+var hidePhotoOverlay = function () {
   galleryOverlay.classList.add('hidden');
 
-  document.removeEventListener('click', hideOverlayOnEsc);
-  hideOverlayTarget.removeEventListener('keydown', hideOverlayOnEnter);
+  document.removeEventListener('click', hidePhotoOverlayOnEsc);
+  hideOverlayTarget.removeEventListener('keydown', hidePhotoOverlayOnEnter);
 };
 
-var hideOverlayOnEsc = function (e) {
+var hidePhotoOverlayOnEsc = function (e) {
   if (e.keyCode === ESC_BUTTON) {
-    hideOverlay();
+    hidePhotoOverlay();
   }
   return false;
 };
 
-var hideOverlayOnEnter = function (e) {
+var hidePhotoOverlayOnEnter = function (e) {
   if (e.keyCode === ENTER_BUTTON) {
-    hideOverlay();
+    hidePhotoOverlay();
   }
   return false;
 };
 
-document.addEventListener('click', showOverlay);
-document.addEventListener('keydown', showOverlayOnEnter);
+document.addEventListener('click', showPhotoOverlay);
+document.addEventListener('keydown', showPhotoOverlayOnEnter);
 
-hideOverlayTarget.addEventListener('click', hideOverlay);
+hideOverlayTarget.addEventListener('click', hidePhotoOverlay);
+
+var uploadPhotoButton = document.querySelector('#upload-file');
+var closeOverlayButton = document.querySelector('.upload-form-cancel');
+var uploadOverlay = document.querySelector('.upload-overlay');
+var increaseButton = document.querySelector('.upload-resize-controls-button-inc');
+var deccreaseButton = document.querySelector('.upload-resize-controls-button-dec');
+
+var showUploadOverlay = function () {
+  uploadOverlay.classList.remove('hidden');
+  document.addEventListener('keydown', hideUploadOverlayOnEsc);
+  closeOverlayButton.addEventListener('click', hideUploadOverlay);
+  closeOverlayButton.addEventListener('keydown', hideUploadOverlayOnEnter);
+  document.addEventListener('click', enablePreviewEffect);
+  increaseButton.addEventListener('click', increaseImageSize);
+  deccreaseButton.addEventListener('click', decreaseImageSize);
+};
+
+var hideUploadOverlay = function () {
+  uploadOverlay.classList.add('hidden');
+  document.removeEventListener('keydown', hideUploadOverlayOnEsc);
+  closeOverlayButton.removeEventListener('click', hideUploadOverlay);
+  closeOverlayButton.removeEventListener('keydown', hideUploadOverlayOnEnter);
+  document.removeEventListener('click', enablePreviewEffect);
+  increaseButton.removeEventListener('click', increaseImageSize);
+  deccreaseButton.removeEventListener('click', decreaseImageSize);
+};
+
+var hideUploadOverlayOnEsc = function (e) {
+  if (e.keyCode === ESC_BUTTON && e.target.className !== 'upload-form-description') {
+    hideUploadOverlay();
+  }
+};
+
+var hideUploadOverlayOnEnter = function (e) {
+  if (e.keyCode === ENTER_BUTTON) {
+    hideUploadOverlay();
+  }
+};
+
+var enablePreviewEffect = function (e) {
+  var target = e.target.closest('.upload-effect-label') ? e.target.closest('.upload-effect-label') : e.target;
+  var effectPreviewImage = document.querySelector('.effect-image-preview');
+  if (target.className.indexOf('upload-effect-label') > -1 || target.className === 'upload-effect-label') {
+    var effectName = target.getAttribute('for').replace('upload-', '');
+    effectPreviewImage.className = '';
+    effectPreviewImage.classList.add('effect-image-preview');
+    effectPreviewImage.classList.add(effectName);
+  }
+};
+
+var decreaseImageSize = function () {
+  var imagePreview = document.querySelector('.effect-image-preview');
+  var currentSizeVal = parseInt(document.querySelector('.upload-resize-controls-value').getAttribute('value').replace('%', ''), 10);
+  var minSize = 25;
+  var step = 25;
+  var newSize = currentSizeVal - step;
+  if (newSize < minSize) {
+    imagePreview.style.transform = 'scale(' + minSize / 100 + ')';
+    document.querySelector('.upload-resize-controls-value').setAttribute('value', minSize);
+  } else if (currentSizeVal > minSize) {
+    imagePreview.style.transform = 'scale(' + newSize / 100 + ')';
+    document.querySelector('.upload-resize-controls-value').setAttribute('value', newSize);
+  }
+  return false;
+};
+
+var increaseImageSize = function () {
+  var imagePreview = document.querySelector('.effect-image-preview');
+  var currentSizeVal = parseInt(document.querySelector('.upload-resize-controls-value').getAttribute('value').replace('%', ''), 10);
+  var maxSize = 100;
+  var step = 25;
+  var newSize = currentSizeVal + step;
+  if (newSize > maxSize) {
+    imagePreview.style.transform = 'scale(' + maxSize / 100 + ')';
+    document.querySelector('.upload-resize-controls-value').setAttribute('value', maxSize);
+  } else if (currentSizeVal < maxSize) {
+    imagePreview.style.transform = 'scale(' + newSize / 100 + ')';
+    document.querySelector('.upload-resize-controls-value').setAttribute('value', newSize);
+  }
+  return false;
+};
+
+var checkHashtagNum = function () {
+  var hashtagArr = document.querySelector('.upload-form-hashtags').value.toLowerCase().split(' ');
+  return hashtagArr.length > 5 ? false : true;
+};
+
+var checkHashtagDoubles = function () {
+  var hashtagArr = document.querySelector('.upload-form-hashtags').value.toLowerCase().split(' ');
+  var testString = hashtagArr[0];
+  for (var i = 1; i < hashtagArr.length; i++) {
+    if (testString === hashtagArr[i]) {
+      return false;
+    } else {
+      if (i === hashtagArr.length - 1 && hashtagArr.length !== 1) {
+        hashtagArr = hashtagArr.splice(1, hashtagArr.length);
+        testString = hashtagArr[0];
+      }
+    }
+  }
+  return true;
+};
+
+var checkHashtagLength = function () {
+  var hashtagArr = document.querySelector('.upload-form-hashtags').value.toLowerCase().split(' ');
+
+  for (var i = 0; i < hashtagArr.length; i++) {
+    if (hashtagArr[i].length > 19) {
+      return false;
+    }
+  }
+  return true;
+};
+
+var checkHashtagHashAndSpaces = function () {
+  var hashtagBlock = document.querySelector('.upload-form-hashtags');
+  if (hashtagBlock.value === '') {
+    return true;
+  }
+  var hashtagArr = hashtagBlock.value.toLowerCase().split(' ');
+  for (var i = 0; i < hashtagArr.length; i++) {
+    if (hashtagArr[i][0] !== '#') {
+      return false;
+    } else {
+      for (var j = 1; j < hashtagArr[i].length; j++) {
+        if (hashtagArr[i][j] === '#') {
+          return false;
+        }
+      }
+    }
+  }
+  return true;
+};
+
+var checkHashtagValidity = function (e) {
+  var hashtagBlock = document.querySelector('.upload-form-hashtags');
+  if (checkHashtagNum() && checkHashtagDoubles() && checkHashtagLength() && checkHashtagHashAndSpaces()) {
+    return true;
+  } else {
+    e.preventDefault();
+    hashtagBlock.style.border = '1px solid red';
+    return false;
+  }
+};
+
+uploadPhotoButton.addEventListener('change', showUploadOverlay);
+
+var photoForm = document.querySelector('.upload-form');
+photoForm.addEventListener('submit', checkHashtagValidity);
