@@ -186,7 +186,7 @@ var enablePreviewEffect = function (e) {
 
 var decreaseImageSize = function () {
   var imagePreview = document.querySelector('.effect-image-preview');
-  var currentSizeVal = parseInt(document.querySelector('.upload-resize-controls-value').getAttribute('value').replace('%', ''));
+  var currentSizeVal = parseInt(document.querySelector('.upload-resize-controls-value').getAttribute('value').replace('%', ''), 10);
   var minSize = 25;
   var step = 25;
   var newSize = currentSizeVal - step;
@@ -202,7 +202,7 @@ var decreaseImageSize = function () {
 
 var increaseImageSize = function () {
   var imagePreview = document.querySelector('.effect-image-preview');
-  var currentSizeVal = parseInt(document.querySelector('.upload-resize-controls-value').getAttribute('value').replace('%', ''));
+  var currentSizeVal = parseInt(document.querySelector('.upload-resize-controls-value').getAttribute('value').replace('%', ''), 10);
   var maxSize = 100;
   var step = 25;
   var newSize = currentSizeVal + step;
