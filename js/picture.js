@@ -218,25 +218,22 @@ var increaseImageSize = function () {
 
 var checkHashtagNum = function () {
   var hashtagArr = document.querySelector('.upload-form-hashtags').value.toLowerCase().split(' ');
-
   return hashtagArr.length > 5 ? false : true;
 };
 
 var checkHashtagDoubles = function () {
   var hashtagArr = document.querySelector('.upload-form-hashtags').value.toLowerCase().split(' ');
   var testString = hashtagArr[0];
-  for (var i = 0; i < hashtagArr.length; i++) {
-    console.log('compare ' + testString + 'and ' + hashtagArr[i + 1]);
-    if (testString === hashtagArr[i + 1]) {
+  for (var i = 1; i < hashtagArr.length; i++) {
+    if (testString === hashtagArr[i]) {
       return false;
     } else {
-      testString = hashtagArr[i + 1];
-      console.log('testString = ' + testString);
-      hashtagArr = hashtagArr.splice(1, hashtagArr.length);
-      console.log('testArr: ' + hashtagArr);
+      if (i === hashtagArr.length - 1 && hashtagArr.length !== 1) {
+        hashtagArr = hashtagArr.splice(1, hashtagArr.length);
+        testString = hashtagArr[0];
+      }
     }
   }
-
   return true;
 };
 
@@ -244,7 +241,7 @@ var checkHashtagLength = function () {
   var hashtagArr = document.querySelector('.upload-form-hashtags').value.toLowerCase().split(' ');
 
   for (var i = 0; i < hashtagArr.length; i++) {
-    if (hashtagArr[i].length > 20) {
+    if (hashtagArr[i].length > 19) {
       return false;
     }
   }
@@ -252,7 +249,11 @@ var checkHashtagLength = function () {
 };
 
 var checkHashtagHashAndSpaces = function () {
-  var hashtagArr = document.querySelector('.upload-form-hashtags').value.toLowerCase().split(' ');
+  var hashtagBlock = document.querySelector('.upload-form-hashtags');
+  if (hashtagBlock.value === '') {
+    return true;
+  }
+  var hashtagArr = hashtagBlock.value.toLowerCase().split(' ');
   for (var i = 0; i < hashtagArr.length; i++) {
     if (hashtagArr[i][0] !== '#') {
       return false;
@@ -267,5 +268,18 @@ var checkHashtagHashAndSpaces = function () {
   return true;
 };
 
+var checkHashtagValidity = function (e) {
+  var hashtagBlock = document.querySelector('.upload-form-hashtags');
+  if (checkHashtagNum() && checkHashtagDoubles() && checkHashtagLength() && checkHashtagHashAndSpaces()) {
+    return true;
+  } else {
+    e.preventDefault();
+    hashtagBlock.style.border = '1px solid red';
+    return false;
+  }
+};
+
 uploadPhotoButton.addEventListener('change', showUploadOverlay);
 
+var photoForm = document.querySelector('.upload-form');
+photoForm.addEventListener('submit', checkHashtagValidity);
