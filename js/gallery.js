@@ -4,11 +4,7 @@
 
 'use strict';
 (function () {
-  var fragment = document.createDocumentFragment();
-  var picTemplate = document.querySelector('#picture-template').content;
-  var picturesContainer = document.querySelector('.pictures');
-  var pics = window.picture.createPicObjects(25);
-
-  window.picture.createPicList(pics, picTemplate, fragment);
-  picturesContainer.appendChild(fragment);
+  window.pictures.picturesContainer.addEventListener('click', window.preview.showPhotoOverlay);
+  window.pictures.picturesContainer.addEventListener('keydown', window.preview.showPhotoOverlayOnEnter);
+  window.preview.hideOverlayTarget.addEventListener('click', window.preview.hidePhotoOverlay);
 })();
