@@ -223,7 +223,6 @@
       } else {
         document.removeEventListener('mousemove', onMouseMove);
       }
-      // effectPreviewImage.style.filter = 'grayscale(' + pinLeftPos / 100 + ')';
 
       effectPowerVal.setAttribute('value', Math.floor(pinLeftPos));
     };
