@@ -9,11 +9,15 @@
   var photoForm = document.querySelector('.upload-form');
   var increaseButton = document.querySelector('.upload-resize-controls-button-inc');
   var decreaseButton = document.querySelector('.upload-resize-controls-button-dec');
+  var effectPowerContainer = document.querySelector('.upload-effect-level');
   var effectPowerHandle = document.querySelector('.upload-effect-level-pin');
   var effectPowerVal = document.querySelector('.upload-effect-level-value');
   var effectPowerLine = document.querySelector('.upload-effect-level-val');
   var effectPreviewImage = document.querySelector('.effect-image-preview');
   var defaultEffectVal = 20;
+
+  effectPowerVal.classList.add('hidden');
+  effectPowerContainer.classList.add('hidden');
 
   var showUploadOverlay = function () {
     uploadOverlay.classList.remove('hidden');
@@ -57,6 +61,7 @@
       effectPowerVal.setAttribute('value', defaultEffectVal);
       effectPowerLine.style.width = defaultEffectVal + '%';
       effectPowerHandle.style.left = defaultEffectVal + '%';
+      effectPowerContainer.classList.remove('hidden');
       switch (effectName) {
         case 'effect-chrome':
           effectPreviewImage.style.filter = 'grayscale(' + defaultEffectVal / 100 + ')';
@@ -75,6 +80,7 @@
           break;
         default:
           effectPreviewImage.style.filter = 'none';
+          effectPowerContainer.classList.add('hidden');
           break;
       }
     }
