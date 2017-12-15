@@ -7,8 +7,6 @@
   var closeOverlayButton = document.querySelector('.upload-form-cancel');
   var uploadOverlay = document.querySelector('.upload-overlay');
   var photoForm = document.querySelector('.upload-form');
-  var increaseButton = document.querySelector('.upload-resize-controls-button-inc');
-  var decreaseButton = document.querySelector('.upload-resize-controls-button-dec');
   var effectPowerContainer = document.querySelector('.upload-effect-level');
   var effectPowerHandle = document.querySelector('.upload-effect-level-pin');
   var effectPowerVal = document.querySelector('.upload-effect-level-value');
@@ -25,8 +23,8 @@
     closeOverlayButton.addEventListener('click', hideUploadOverlay);
     closeOverlayButton.addEventListener('keydown', hideUploadOverlayOnEnter);
     document.addEventListener('click', enablePreviewEffect);
-    increaseButton.addEventListener('click', increaseImageSize);
-    decreaseButton.addEventListener('click', decreaseImageSize);
+    // increaseButton.addEventListener('click', increaseImageSize);
+    // decreaseButton.addEventListener('click', decreaseImageSize);
   };
 
   var hideUploadOverlay = function () {
@@ -35,8 +33,8 @@
     closeOverlayButton.removeEventListener('click', hideUploadOverlay);
     closeOverlayButton.removeEventListener('keydown', hideUploadOverlayOnEnter);
     document.removeEventListener('click', enablePreviewEffect);
-    increaseButton.removeEventListener('click', increaseImageSize);
-    decreaseButton.removeEventListener('click', decreaseImageSize);
+    // increaseButton.removeEventListener('click', increaseImageSize);
+    // decreaseButton.removeEventListener('click', decreaseImageSize);
   };
 
   var hideUploadOverlayOnEsc = function (e) {
@@ -84,38 +82,6 @@
           break;
       }
     }
-  };
-
-  var decreaseImageSize = function () {
-    var imagePreview = document.querySelector('.effect-image-preview');
-    var currentSizeVal = parseInt(document.querySelector('.upload-resize-controls-value').getAttribute('value').replace('%', ''), 10);
-    var minSize = 25;
-    var step = 25;
-    var newSize = currentSizeVal - step;
-    if (newSize < minSize) {
-      imagePreview.style.transform = 'scale(' + minSize / 100 + ')';
-      document.querySelector('.upload-resize-controls-value').setAttribute('value', minSize);
-    } else if (currentSizeVal > minSize) {
-      imagePreview.style.transform = 'scale(' + newSize / 100 + ')';
-      document.querySelector('.upload-resize-controls-value').setAttribute('value', newSize);
-    }
-    return false;
-  };
-
-  var increaseImageSize = function () {
-    var imagePreview = document.querySelector('.effect-image-preview');
-    var currentSizeVal = parseInt(document.querySelector('.upload-resize-controls-value').getAttribute('value').replace('%', ''), 10);
-    var maxSize = 100;
-    var step = 25;
-    var newSize = currentSizeVal + step;
-    if (newSize > maxSize) {
-      imagePreview.style.transform = 'scale(' + maxSize / 100 + ')';
-      document.querySelector('.upload-resize-controls-value').setAttribute('value', maxSize);
-    } else if (currentSizeVal < maxSize) {
-      imagePreview.style.transform = 'scale(' + newSize / 100 + ')';
-      document.querySelector('.upload-resize-controls-value').setAttribute('value', newSize);
-    }
-    return false;
   };
 
   var checkHashtagNum = function () {
