@@ -3,6 +3,7 @@
   window.data = {
     ESC_BUTTON: 27,
     ENTER_BUTTON: 13,
+    defaultEffectVal: 20,
     createPicObjects: function (picCount) {
       var picArr = [];
       var picIndexArr = createPicIndexArray(picCount);
