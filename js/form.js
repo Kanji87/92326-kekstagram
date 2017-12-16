@@ -1,5 +1,3 @@
-// модуль, который работает с формой редактирования изображения
-
 'use strict';
 
 (function () {
@@ -7,26 +5,19 @@
   var closeOverlayButton = document.querySelector('.upload-form-cancel');
   var uploadOverlay = document.querySelector('.upload-overlay');
   var photoForm = document.querySelector('.upload-form');
-  var increaseButton = document.querySelector('.upload-resize-controls-button-inc');
-  var decreaseButton = document.querySelector('.upload-resize-controls-button-dec');
-  var effectPowerContainer = document.querySelector('.upload-effect-level');
-  var effectPowerHandle = document.querySelector('.upload-effect-level-pin');
-  var effectPowerVal = document.querySelector('.upload-effect-level-value');
-  var effectPowerLine = document.querySelector('.upload-effect-level-val');
-  var effectPreviewImage = document.querySelector('.effect-image-preview');
-  var defaultEffectVal = 20;
 
-  effectPowerVal.classList.add('hidden');
-  effectPowerContainer.classList.add('hidden');
+  var scaleHandlerContainer = document.querySelector('.upload-resize-controls');
+  var scaleValue = document.querySelector('.upload-resize-controls-value');
+  var imagePreview = document.querySelector('.effect-image-preview');
+
+  var filterElement = document.querySelector('.effect-image-preview');
+  var effectPowerContainer = document.querySelector('.upload-effect-level');
 
   var showUploadOverlay = function () {
     uploadOverlay.classList.remove('hidden');
     document.addEventListener('keydown', hideUploadOverlayOnEsc);
     closeOverlayButton.addEventListener('click', hideUploadOverlay);
     closeOverlayButton.addEventListener('keydown', hideUploadOverlayOnEnter);
-    document.addEventListener('click', enablePreviewEffect);
-    increaseButton.addEventListener('click', increaseImageSize);
-    decreaseButton.addEventListener('click', decreaseImageSize);
   };
 
   var hideUploadOverlay = function () {
@@ -34,9 +25,6 @@
     document.removeEventListener('keydown', hideUploadOverlayOnEsc);
     closeOverlayButton.removeEventListener('click', hideUploadOverlay);
     closeOverlayButton.removeEventListener('keydown', hideUploadOverlayOnEnter);
-    document.removeEventListener('click', enablePreviewEffect);
-    increaseButton.removeEventListener('click', increaseImageSize);
-    decreaseButton.removeEventListener('click', decreaseImageSize);
   };
 
   var hideUploadOverlayOnEsc = function (e) {
@@ -49,73 +37,6 @@
     if (e.keyCode === window.data.ENTER_BUTTON) {
       hideUploadOverlay();
     }
-  };
-
-  var enablePreviewEffect = function (e) {
-    var target = e.target.closest('.upload-effect-label') ? e.target.closest('.upload-effect-label') : e.target;
-    if (target.className.indexOf('upload-effect-label') > -1 || target.className === 'upload-effect-label') {
-      var effectName = target.getAttribute('for').replace('upload-', '');
-      effectPreviewImage.className = '';
-      effectPreviewImage.classList.add('effect-image-preview');
-      effectPreviewImage.classList.add(effectName);
-      effectPowerVal.setAttribute('value', defaultEffectVal);
-      effectPowerLine.style.width = defaultEffectVal + '%';
-      effectPowerHandle.style.left = defaultEffectVal + '%';
-      effectPowerContainer.classList.remove('hidden');
-      switch (effectName) {
-        case 'effect-chrome':
-          effectPreviewImage.style.filter = 'grayscale(' + defaultEffectVal / 100 + ')';
-          break;
-        case 'effect-sepia':
-          effectPreviewImage.style.filter = 'sepia(' + defaultEffectVal / 100 + ')';
-          break;
-        case 'effect-marvin':
-          effectPreviewImage.style.filter = 'invert(' + defaultEffectVal + '%)';
-          break;
-        case 'effect-phobos':
-          effectPreviewImage.style.filter = 'blur(' + defaultEffectVal * 3 / 100 + 'px)';
-          break;
-        case 'effect-heat':
-          effectPreviewImage.style.filter = 'brightness(' + defaultEffectVal * 3 / 100 + ')';
-          break;
-        default:
-          effectPreviewImage.style.filter = 'none';
-          effectPowerContainer.classList.add('hidden');
-          break;
-      }
-    }
-  };
-
-  var decreaseImageSize = function () {
-    var imagePreview = document.querySelector('.effect-image-preview');
-    var currentSizeVal = parseInt(document.querySelector('.upload-resize-controls-value').getAttribute('value').replace('%', ''), 10);
-    var minSize = 25;
-    var step = 25;
-    var newSize = currentSizeVal - step;
-    if (newSize < minSize) {
-      imagePreview.style.transform = 'scale(' + minSize / 100 + ')';
-      document.querySelector('.upload-resize-controls-value').setAttribute('value', minSize);
-    } else if (currentSizeVal > minSize) {
-      imagePreview.style.transform = 'scale(' + newSize / 100 + ')';
-      document.querySelector('.upload-resize-controls-value').setAttribute('value', newSize);
-    }
-    return false;
-  };
-
-  var increaseImageSize = function () {
-    var imagePreview = document.querySelector('.effect-image-preview');
-    var currentSizeVal = parseInt(document.querySelector('.upload-resize-controls-value').getAttribute('value').replace('%', ''), 10);
-    var maxSize = 100;
-    var step = 25;
-    var newSize = currentSizeVal + step;
-    if (newSize > maxSize) {
-      imagePreview.style.transform = 'scale(' + maxSize / 100 + ')';
-      document.querySelector('.upload-resize-controls-value').setAttribute('value', maxSize);
-    } else if (currentSizeVal < maxSize) {
-      imagePreview.style.transform = 'scale(' + newSize / 100 + ')';
-      document.querySelector('.upload-resize-controls-value').setAttribute('value', newSize);
-    }
-    return false;
   };
 
   var checkHashtagNum = function () {
@@ -181,66 +102,39 @@
     }
   };
 
+  var adjustScale = function (scale) {
+    imagePreview.style.transform = 'scale(' + scale / 100 + ')';
+    scaleValue.setAttribute('value', scale);
+  };
+
+
+  var applyFilter = function (filterName) {
+    effectPowerContainer.classList.remove('hidden');
+    switch (filterName) {
+      case 'effect-chrome':
+        filterElement.style.filter = 'grayscale(' + window.data.defaultEffectVal / 100 + ')';
+        break;
+      case 'effect-sepia':
+        filterElement.style.filter = 'sepia(' + window.data.defaultEffectVal / 100 + ')';
+        break;
+      case 'effect-marvin':
+        filterElement.style.filter = 'invert(' + window.data.defaultEffectVal + '%)';
+        break;
+      case 'effect-phobos':
+        filterElement.style.filter = 'blur(' + window.data.defaultEffectVal * 3 / 100 + 'px)';
+        break;
+      case 'effect-heat':
+        filterElement.style.filter = 'brightness(' + window.data.defaultEffectVal * 3 / 100 + ')';
+        break;
+      default:
+        filterElement.style.filter = 'none';
+        effectPowerContainer.classList.add('hidden');
+    }
+  };
+
+  window.initializeScale(scaleHandlerContainer, adjustScale);
+  window.initializeFilters(filterElement, applyFilter);
+
   uploadPhotoButton.addEventListener('change', showUploadOverlay);
   photoForm.addEventListener('submit', checkHashtagValidity);
-
-  effectPowerHandle.addEventListener('mousedown', function (evt) {
-    var varLineWidth = document.querySelector('.upload-effect-level-line').clientWidth;
-    var pinLeftPos;
-
-    var startCoords = {
-      x: evt.clientX
-      // y: evt.clientY
-    };
-
-    var onMouseMove = function (mouseMoveEvt) {
-      mouseMoveEvt.preventDefault();
-      var shiftCoords = {
-        x: startCoords.x - mouseMoveEvt.clientX
-      };
-
-      startCoords = {
-        x: mouseMoveEvt.clientX
-      };
-
-      if (effectPowerHandle.offsetLeft - shiftCoords.x > varLineWidth) {
-        pinLeftPos = 100;
-        document.removeEventListener('mousemove', onMouseMove);
-      } else if (effectPowerHandle.offsetLeft - shiftCoords.x < 0) {
-        pinLeftPos = 0;
-        document.removeEventListener('mousemove', onMouseMove);
-      } else {
-        pinLeftPos = ((effectPowerHandle.offsetLeft - shiftCoords.x) * 100 / varLineWidth);
-      }
-
-      effectPowerHandle.style.left = pinLeftPos + '%';
-      effectPowerLine.style.width = pinLeftPos + '%';
-
-      if (effectPreviewImage.className.indexOf('effect-chrome') > -1) {
-        effectPreviewImage.style.filter = 'grayscale(' + pinLeftPos / 100 + ')';
-      } else if (effectPreviewImage.className.indexOf('effect-sepia') > -1) {
-        effectPreviewImage.style.filter = 'sepia(' + pinLeftPos / 100 + ')';
-      } else if (effectPreviewImage.className.indexOf('effect-marvin') > -1) {
-        effectPreviewImage.style.filter = 'invert(' + pinLeftPos + '%)';
-      } else if (effectPreviewImage.className.indexOf('effect-phobos') > -1) {
-        effectPreviewImage.style.filter = 'blur(' + pinLeftPos * 3 / 100 + 'px)';
-      } else if (effectPreviewImage.className.indexOf('effect-heat') > -1) {
-        effectPreviewImage.style.filter = 'brightness(' + pinLeftPos * 3 / 100 + ')';
-      } else {
-        document.removeEventListener('mousemove', onMouseMove);
-      }
-
-      effectPowerVal.setAttribute('value', Math.floor(pinLeftPos));
-    };
-
-    var onMouseUp = function (mouseUpEvt) {
-      mouseUpEvt.preventDefault();
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-    };
-
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-
-  });
 })();
