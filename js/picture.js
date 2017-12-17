@@ -7,7 +7,6 @@
 
   var fragment = document.createDocumentFragment();
   var picTemplate = document.querySelector('#picture-template').content;
-  var pics = window.data.createPicObjects(25);
 
   var createDomEl = function (obj, template) {
     var domEl = template.cloneNode(true);
