@@ -7,7 +7,6 @@
 
   var fragment = document.createDocumentFragment();
   var picTemplate = document.querySelector('#picture-template').content;
-  var pics = window.data.createPicObjects(25);
 
   var createDomEl = function (obj, template) {
     var domEl = template.cloneNode(true);
@@ -23,6 +22,14 @@
     }
   };
 
-  createPicList(pics, picTemplate, fragment);
-  window.pictures.picturesContainer.appendChild(fragment);
+  var onLoad = function (data) {
+    createPicList(data, picTemplate, fragment);
+    window.pictures.picturesContainer.appendChild(fragment);
+  };
+
+  var onError = function (message) {
+    window.data.showErrorMessage(message);
+  };
+
+  window.backend.load(onLoad, onError);
 })();
