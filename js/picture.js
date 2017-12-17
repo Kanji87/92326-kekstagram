@@ -23,6 +23,14 @@
     }
   };
 
-  createPicList(pics, picTemplate, fragment);
-  window.pictures.picturesContainer.appendChild(fragment);
+  var onLoad = function (data) {
+    createPicList(data, picTemplate, fragment);
+    window.pictures.picturesContainer.appendChild(fragment);
+  };
+
+  var onError = function (message) {
+    window.data.showErrorMessage(message);
+  };
+
+  window.backend.load(onLoad, onError);
 })();

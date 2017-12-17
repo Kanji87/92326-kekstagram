@@ -22,6 +22,22 @@
         }
       }
       return picArr;
+    },
+    showErrorMessage: function (message) {
+      var messageBlock = document.createElement('div');
+      var messageContainer = document.querySelector('.upload-message-container');
+      messageBlock.textContent = message;
+      messageBlock.classList.add('upload-message-error');
+      messageContainer.appendChild(messageBlock);
+      messageContainer.parentNode.classList.remove('hidden');
+    },
+    showSuccessMessage: function (message) {
+      var messageBlock = document.createElement('div');
+      var messageContainer = document.querySelector('.upload-message-container');
+      messageBlock.textContent = message;
+      messageBlock.classList.add('upload-message');
+      messageContainer.appendChild(messageBlock);
+      messageContainer.parentNode.classList.remove('hidden');
     }
   };
 

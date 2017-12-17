@@ -94,6 +94,10 @@
   var checkHashtagValidity = function (e) {
     var hashtagBlock = document.querySelector('.upload-form-hashtags');
     if (checkHashtagNum() && checkHashtagDoubles() && checkHashtagLength() && checkHashtagHashAndSpaces()) {
+      e.preventDefault();
+      var formData = new FormData(photoForm);
+      hashtagBlock.style.border = 'none';
+      window.backend.save(formData, onLoad, onError);
       return true;
     } else {
       e.preventDefault();
@@ -130,6 +134,16 @@
         filterElement.style.filter = 'none';
         effectPowerContainer.classList.add('hidden');
     }
+  };
+
+  var onLoad = function (message) {
+    hideUploadOverlay();
+    window.data.showSuccessMessage(message);
+  };
+
+  var onError = function (message) {
+    hideUploadOverlay();
+    window.data.showErrorMessage(message);
   };
 
   window.initializeScale(scaleHandlerContainer, adjustScale);
