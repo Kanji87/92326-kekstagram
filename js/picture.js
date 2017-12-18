@@ -33,7 +33,6 @@
 
   var onLoad = function (data) {
     pictures = data;
-    console.log(pictures);
     createPicList(pictures, picTemplate, fragment);
     window.picture.picturesContainer.appendChild(fragment);
     filtersBlock.classList.remove('filters-inactive');
@@ -45,15 +44,6 @@
 
   var showRecommend = function () {
     window.picture.picturesContainer.innerHTML = '';
-    // pictures.sort(function (first, second) {
-    //   if (first.likes > second.likes) {
-    //     return -1;
-    //   } else if (first.likes < second.likes) {
-    //     return 1;
-    //   } else {
-    //     return 0;
-    //   }
-    // });
     createPicList(pictures, picTemplate, fragment);
     window.picture.picturesContainer.appendChild(fragment);
   };
