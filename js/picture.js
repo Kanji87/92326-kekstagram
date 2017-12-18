@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  window.pictures = {
+  window.picture = {
     picturesContainer: document.querySelector('.pictures')
   };
 
@@ -24,7 +24,7 @@
 
   var onLoad = function (data) {
     createPicList(data, picTemplate, fragment);
-    window.pictures.picturesContainer.appendChild(fragment);
+    window.picture.picturesContainer.appendChild(fragment);
   };
 
   var onError = function (message) {
