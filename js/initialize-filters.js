@@ -52,15 +52,15 @@
           effectPowerHandle.style.left = pinLeftPos + '%';
           effectPowerLine.style.width = pinLeftPos + '%';
 
-          if (handler.className.indexOf('effect-chrome') > -1) {
+          if (handler.classList.contains('effect-chrome')) {
             handler.style.filter = 'grayscale(' + pinLeftPos / 100 + ')';
-          } else if (handler.className.indexOf('effect-sepia') > -1) {
+          } else if (handler.classList.contains('effect-sepia')) {
             handler.style.filter = 'sepia(' + pinLeftPos / 100 + ')';
-          } else if (handler.className.indexOf('effect-marvin') > -1) {
+          } else if (handler.classList.contains('effect-marvin')) {
             handler.style.filter = 'invert(' + pinLeftPos + '%)';
-          } else if (handler.className.indexOf('effect-phobos') > -1) {
+          } else if (handler.classList.contains('effect-phobos')) {
             handler.style.filter = 'blur(' + pinLeftPos * 3 / 100 + 'px)';
-          } else if (handler.className.indexOf('effect-heat') > -1) {
+          } else if (handler.classList.contains('effect-heat')) {
             handler.style.filter = 'brightness(' + pinLeftPos * 3 / 100 + ')';
           } else {
             document.removeEventListener('mousemove', onMouseMove);
