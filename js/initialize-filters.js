@@ -27,7 +27,6 @@
 
         var startCoords = {
           x: evt.clientX
-          // y: evt.clientY
         };
 
         var onMouseMove = function (mouseMoveEvt) {

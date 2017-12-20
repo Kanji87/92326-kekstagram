@@ -1,10 +1,12 @@
 'use strict';
 
 (function () {
+  var DEFAULT_IMAGE = 'img/upload-default-image.jpg';
   var uploadPhotoButton = document.querySelector('#upload-file');
   var closeOverlayButton = document.querySelector('.upload-form-cancel');
   var uploadOverlay = document.querySelector('.upload-overlay');
   var photoForm = document.querySelector('.upload-form');
+  var uploadMessage = document.querySelector('.upload-message');
 
   var scaleHandlerContainer = document.querySelector('.upload-resize-controls');
   var scaleValue = document.querySelector('.upload-resize-controls-value');
@@ -51,31 +53,30 @@
   };
 
   var checkHashtagNum = function () {
-    var hashtagArr = document.querySelector('.upload-form-hashtags').value.toLowerCase().split(' ');
-    return hashtagArr.length > 5 ? false : true;
+    var hashtags = document.querySelector('.upload-form-hashtags').value.toLowerCase().split(' ');
+    return hashtags.length > 5 ? false : true;
   };
 
   var checkHashtagDoubles = function () {
-    var hashtagArr = document.querySelector('.upload-form-hashtags').value.toLowerCase().split(' ');
-    var testString = hashtagArr[0];
-    for (var i = 1; i < hashtagArr.length; i++) {
-      if (testString === hashtagArr[i]) {
+    var hashtags = document.querySelector('.upload-form-hashtags').value.toLowerCase().split(' ');
+    var testString = hashtags[0];
+    for (var i = 1; i < hashtags.length; i++) {
+      if (testString === hashtags[i]) {
         return false;
-      } else {
-        if (i === hashtagArr.length - 1 && hashtagArr.length !== 1) {
-          hashtagArr = hashtagArr.splice(1, hashtagArr.length);
-          testString = hashtagArr[0];
-        }
+      }
+      if (i === hashtags.length - 1 && hashtags.length !== 1) {
+        hashtags = hashtags.splice(1, hashtags.length);
+        testString = hashtags[0];
       }
     }
     return true;
   };
 
   var checkHashtagLength = function () {
-    var hashtagArr = document.querySelector('.upload-form-hashtags').value.toLowerCase().split(' ');
+    var hashtags = document.querySelector('.upload-form-hashtags').value.toLowerCase().split(' ');
 
-    for (var i = 0; i < hashtagArr.length; i++) {
-      if (hashtagArr[i].length > 19) {
+    for (var i = 0; i < hashtags.length; i++) {
+      if (hashtags[i].length > 19) {
         return false;
       }
     }
@@ -87,15 +88,14 @@
     if (hashtagBlock.value === '') {
       return true;
     }
-    var hashtagArr = hashtagBlock.value.toLowerCase().split(' ');
-    for (var i = 0; i < hashtagArr.length; i++) {
-      if (hashtagArr[i][0] !== '#') {
+    var hashtags = hashtagBlock.value.toLowerCase().split(' ');
+    for (var i = 0; i < hashtags.length; i++) {
+      if (hashtags[i][0] !== '#') {
         return false;
-      } else {
-        for (var j = 1; j < hashtagArr[i].length; j++) {
-          if (hashtagArr[i][j] === '#') {
-            return false;
-          }
+      }
+      for (var j = 1; j < hashtags[i].length; j++) {
+        if (hashtags[i][j] === '#') {
+          return false;
         }
       }
     }
@@ -119,7 +119,7 @@
 
   var adjustScale = function (scale) {
     imagePreview.style.transform = 'scale(' + scale / 100 + ')';
-    scaleValue.setAttribute('value', scale);
+    scaleValue.setAttribute('value', scale + '%');
   };
 
 
@@ -147,9 +147,33 @@
     }
   };
 
+  var resetForm = function () {
+    var defaultEffect = document.querySelector('#upload-effect-none');
+    var hashtagInput = document.querySelector('.upload-form-hashtags');
+    var descriptionInput = document.querySelector('.upload-form-description');
+    var effectPowerHandle = document.querySelector('.upload-effect-level-pin');
+    var effectPowerLine = document.querySelector('.upload-effect-level-val');
+    var effectPowerVal = document.querySelector('.upload-effect-level-value');
+
+    uploadMessage.classList.add('hidden');
+    effectPowerContainer.classList.add('hidden');
+    imagePreview.setAttribute('src', DEFAULT_IMAGE);
+    imagePreview.style = '';
+    imagePreview.className = 'effect-image-preview';
+    defaultEffect.checked = true;
+    hashtagInput.value = '';
+    uploadPhotoButton.value = '';
+    descriptionInput.value = '';
+    scaleValue.value = '100%';
+    effectPowerVal.setAttribute('value', window.data.DEFAULT_EFFECT_VAL);
+    effectPowerLine.style.width = window.data.DEFAULT_EFFECT_VAL + '%';
+    effectPowerHandle.style.left = window.data.DEFAULT_EFFECT_VAL + '%';
+  };
+
   var onLoad = function (message) {
     hideUploadOverlay();
     window.data.showSuccessMessage(message);
+    setTimeout(resetForm, 1500);
   };
 
   var onError = function (message) {

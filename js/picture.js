@@ -35,10 +35,10 @@
     return domEl;
   };
 
-  var createPicList = function (arr, template, fragmentVar) {
-    for (var i = 0; i < arr.length; i++) {
-      fragmentVar.appendChild(createDomEl(arr[i], template));
-    }
+  var createPicList = function (pics, template, fragmentVar) {
+    pics.forEach(function (pic) {
+      fragmentVar.appendChild(createDomEl(pic, template));
+    });
   };
 
   var onLoad = function (data) {
