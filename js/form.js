@@ -13,7 +13,18 @@
   var filterElement = document.querySelector('.effect-image-preview');
   var effectPowerContainer = document.querySelector('.upload-effect-level');
 
+  var readURL = function (input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        imagePreview.setAttribute('src', e.target.result);
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  };
+
   var showUploadOverlay = function () {
+    readURL(uploadPhotoButton);
     uploadOverlay.classList.remove('hidden');
     document.addEventListener('keydown', hideUploadOverlayOnEsc);
     closeOverlayButton.addEventListener('click', hideUploadOverlay);
@@ -116,19 +127,19 @@
     effectPowerContainer.classList.remove('hidden');
     switch (filterName) {
       case 'effect-chrome':
-        filterElement.style.filter = 'grayscale(' + window.data.defaultEffectVal / 100 + ')';
+        filterElement.style.filter = 'grayscale(' + window.data.DEFAULT_EFFECT_VAL / 100 + ')';
         break;
       case 'effect-sepia':
-        filterElement.style.filter = 'sepia(' + window.data.defaultEffectVal / 100 + ')';
+        filterElement.style.filter = 'sepia(' + window.data.DEFAULT_EFFECT_VAL / 100 + ')';
         break;
       case 'effect-marvin':
-        filterElement.style.filter = 'invert(' + window.data.defaultEffectVal + '%)';
+        filterElement.style.filter = 'invert(' + window.data.DEFAULT_EFFECT_VAL + '%)';
         break;
       case 'effect-phobos':
-        filterElement.style.filter = 'blur(' + window.data.defaultEffectVal * 3 / 100 + 'px)';
+        filterElement.style.filter = 'blur(' + window.data.DEFAULT_EFFECT_VAL * 3 / 100 + 'px)';
         break;
       case 'effect-heat':
-        filterElement.style.filter = 'brightness(' + window.data.defaultEffectVal * 3 / 100 + ')';
+        filterElement.style.filter = 'brightness(' + window.data.DEFAULT_EFFECT_VAL * 3 / 100 + ')';
         break;
       default:
         filterElement.style.filter = 'none';

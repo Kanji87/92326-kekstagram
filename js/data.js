@@ -3,7 +3,7 @@
   window.data = {
     ESC_BUTTON: 27,
     ENTER_BUTTON: 13,
-    defaultEffectVal: 20,
+    DEFAULT_EFFECT_VAL: 20,
     showErrorMessage: function (message) {
       var messageBlock = document.createElement('div');
       var messageContainer = document.querySelector('.upload-message-container');

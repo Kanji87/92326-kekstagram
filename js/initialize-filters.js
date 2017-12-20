@@ -13,9 +13,9 @@
           var effectName = target.getAttribute('for').replace('upload-', '');
           handler.className = 'effect-image-preview';
           handler.classList.add(effectName);
-          effectPowerVal.setAttribute('value', window.data.defaultEffectVal);
-          effectPowerLine.style.width = window.data.defaultEffectVal + '%';
-          effectPowerHandle.style.left = window.data.defaultEffectVal + '%';
+          effectPowerVal.setAttribute('value', window.data.DEFAULT_EFFECT_VAL);
+          effectPowerLine.style.width = window.data.DEFAULT_EFFECT_VAL + '%';
+          effectPowerHandle.style.left = window.data.DEFAULT_EFFECT_VAL + '%';
 
           callback(effectName);
         }
